@@ -1,6 +1,11 @@
+import 'package:demoappkanji/core/model/searchWord.dart';
+import 'package:demoappkanji/core/model/testKanji.dart';
 import 'package:demoappkanji/core/view_mode/likewordModel.dart';
 import 'package:demoappkanji/core/view_mode/signupModel.dart';
+import 'package:demoappkanji/core/view_mode/testModel.dart';
+import 'package:demoappkanji/core/view_mode/wordModel.dart';
 import 'package:demoappkanji/helper/generalinfor.dart';
+import 'package:demoappkanji/ui/TestPage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -31,49 +36,109 @@ class _LikeWordPage extends State<LikeWordPage> {
 
           centerTitle: true,
         ),
-        body: ListView.builder(
-            itemCount: 1,
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                child: Container(
-//                  padding: EdgeInsets.all(5.0),
-//                        height: SizeConfig.blockSizeVertical*10,
-                  child: ListTile(
-                    leading: Text(
-                      '終',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                    trailing: IconButton(
-                        icon: model.Likeword
-                            ? Icon(
-                          Icons.favorite,
-                          color: Colors.pink,
-                        )
-                            : Icon(Icons.favorite),
-                        onPressed: () {
-                          model.change();
-                        }),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'kun: おわる  おわる  おわる  おえる  つい  ついに',
-                          style: TextStyle(color: Colors.purple),
-                        ),
-                        Text('on: シュウ', style: TextStyle(color: Colors.red)),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WordPage()));
-                    },
+        body: Center(
+          child: FutureBuilder<List<SearchWord>>(
+              future: model.likeWord(),
+              builder: (context, snapshot) {
+                if(snapshot.hasData){
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        List<SearchWord> likeWord = snapshot.data;
+                        return Card(
+                          margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                          child: Container(
+                            child: ListTile(
+                              leading: Text(
+                                '${likeWord[index].kanji}',
+                                style: TextStyle(fontSize: 35),
+                              ),
+//                              trailing: IconButton(
+//                                  icon: model.Likeword
+//                                      ? Icon(
+//                                    Icons.favorite,
+//                                    color: Colors.pink,
+//                                  )
+//                                      : Icon(Icons.favorite),
+//                                  onPressed: () {
+//                                    model.change();
+//                                  }),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    (likeWord[index].kunyomi != null) ? 'kun: ${likeWord[index].kunyomi}' :"kun: " ,
+                                    style: TextStyle(color: Colors.purple),
+                                  ),
+                                  Text((likeWord[index].onyomi != null) ? 'on: ${likeWord[index].onyomi}' :"on: ", style: TextStyle(color: Colors.red)),
+                                ],
+                              ),
+                              onTap: () {
+//                                print(likeWord[index].idKanji);
+                                Provider.of<WordModel>(context).getDataKunYomi(likeWord[index].idKanji);
+                                Provider.of<WordModel>(context).setLikeword(likeWord[index].status);
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WordPage(likeWord[index])));
+                              },
+                            ),
+                          ),
+                        );
+                      });
+                }
+                return Center(
+                  child: Text(
+                    'Trống !!!',
+                    style: TextStyle(fontSize: 30, color: Colors.grey),
                   ),
+                );
+              }
+          ),
+        ),
+        bottomNavigationBar: Consumer<TestModel>(builder:(_ ,model, __){
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                color: colorApp,
+                onPressed: () {
+                  model.getDataTestPage('meaning');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => TestPage()));
+                },
+                child: Text(
+                  'Kiểm tra nghĩa',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
-              );
-            }),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(60),
+                ),
+              ),
+              SizedBox(width: 40.0,),
+              RaisedButton(
+                color: colorApp,
+                onPressed: () {
+                  model.getDataTestPage('yomikata');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TestPage()));
+                },
+                child: Text(
+                  'Kiểm tra cách đọc',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(60),
+                ),
+              ),
+            ],
+          );
+        })
 
       );
     });

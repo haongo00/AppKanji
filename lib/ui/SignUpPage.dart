@@ -1,5 +1,6 @@
 import 'package:demoappkanji/core/view_mode/signupModel.dart';
 import 'package:demoappkanji/helper/generalinfor.dart';
+import 'package:demoappkanji/ui/HomePage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -16,16 +17,14 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPage extends State<SignUpPage> {
   Map signupInfor = new Map();
   String _name_hint = 'Họ và Tên *',
-      _email_hint = 'Email * ',
-      _phone_hint = 'Số điện thoại *',
+      _email_hint = 'Tên đăng nhập * ',
       _password_hint = 'Mật khẩu *',
-      _password2_hint = 'Xác nhận mật khẩu *';
+      _password_confimation_hint = 'Xác nhận mật khẩu *';
 
   GlobalKey<FormState> _key1 = new GlobalKey();
   bool _validate = false;
   TextEditingController _email = new TextEditingController();
   TextEditingController _name = new TextEditingController();
-  TextEditingController _phone = new TextEditingController();
   TextEditingController _password = new TextEditingController();
   TextEditingController _password_confirm = new TextEditingController();
 
@@ -134,10 +133,9 @@ class _SignUpPage extends State<SignUpPage> {
                   child: Column(
                     children: <Widget>[
                       _TextFieldsName(_name_hint),
-                      _TextFieldsPhone(_phone_hint),
                       _TextFieldsEmail(_email_hint),
                       _TextFieldsPass(_password_hint, _password),
-                      _TextFieldsPass(_password2_hint, _password_confirm),
+                      _TextFieldsPass(_password_confimation_hint, _password_confirm),
                       Padding(
                         padding: EdgeInsets.all(10.0),
                         child: Text(
@@ -149,67 +147,6 @@ class _SignUpPage extends State<SignUpPage> {
                       SizedBox(
                         height: 5,
                       ),
-//                      Row(
-//                        children: <Widget>[
-//                          new Padding(
-//                            padding: EdgeInsets.only(bottom: 22.0),
-//                            child: new Icon(
-//                              Icons.brightness_1,
-//                              color: colorApp,
-//                              size: 15,
-//                            ),
-//                          ),
-//                          new Expanded(
-//                            child: new RichText(
-//                              text: TextSpan(
-//                                text: ' Đồng ý với ',
-//                                style: TextStyle(
-//                                    fontStyle: FontStyle.italic,
-//                                    color: Colors.indigo,
-//                                    fontSize: 18.0),
-//                                children: <TextSpan>[
-//                                  TextSpan(
-//                                    text: 'điều khoản',
-//                                    recognizer: new TapGestureRecognizer()
-//                                      ..onTap = () {
-//                                        print('Log1');
-//                                        launch(
-//                                            'https://htcon.vn/quy-dinh-chung/');
-//                                      },
-//                                    style: TextStyle(
-//                                      fontStyle: FontStyle.italic,
-//                                      decoration: TextDecoration.underline,
-//                                      decorationColor: colorApp,
-//                                    ),
-//                                  ),
-//                                  TextSpan(
-//                                    text: ' & ',
-//                                    style: TextStyle(fontSize: 18),
-//                                  ),
-//                                  TextSpan(
-//                                    text: 'chính sách',
-//                                    recognizer: new TapGestureRecognizer()
-//                                      ..onTap = () {
-//                                        print('Log');
-//                                        launch(
-//                                            'https://htcon.vn/chinh-sach-bao-mat-thong-tin/');
-//                                      },
-//                                    style: TextStyle(
-//                                      fontStyle: FontStyle.italic,
-//                                      decoration: TextDecoration.underline,
-//                                      fontSize: 18,
-//                                      decorationColor: colorApp,
-//                                    ),
-//                                  ),
-//                                  TextSpan(
-//                                      text: ' sử dụng của HTcon',
-//                                      style: TextStyle(fontSize: 18)),
-//                                ],
-//                              ),
-//                            ),
-//                          ),
-//                        ],
-//                      ),
                       SizedBox(height: 20),
                       Consumer<SignUpModel>(builder: (_, model, __) {
                         return Padding(
@@ -218,26 +155,23 @@ class _SignUpPage extends State<SignUpPage> {
                             child: RaisedButton(
                               onPressed: () async {
 //                                _saveToServer();
-////                                model.setRole();
-//                                signupInfor["role"] = 'tutor';
-//                                signupInfor["full_name"] = _name.text;
-//                                signupInfor["phone_number"] = _phone.text;
-//                                signupInfor["email"] = _email.text;
-//                                signupInfor["password"] = _password.text;
-//                                signupInfor["password_confirmation"] =
-//                                    _password_confirm.text;
-//                                var success = await model.checksignup(signupInfor);
-//                                if (success) {
-//                                  Navigator.push(
-//                                      context,
-//                                      MaterialPageRoute(
-//                                        builder: (context) => PersonInfor(),
-//                                      ));
-//                                }
-//                                else {
-//                                  var _message = await model.Infor;
-//                                  showInSnackBar(_message);
-//                                }
+                                signupInfor["userName"] = _name.text;
+                                signupInfor["accountName"] = _email.text;
+                                signupInfor["pass"] = _password.text;
+                                signupInfor["password_confirmation"] =
+                                    _password_confirm.text;
+                                var success = await model.signup(signupInfor);
+                                if (success) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePage(),
+                                      ));
+                                }
+                                else {
+                                  var _message = await model.message;
+                                  showInSnackBar(_message);
+                                }
                               },
                               color: colorApp,
                               child: new Padding(
@@ -311,25 +245,6 @@ class _SignUpPage extends State<SignUpPage> {
           validator: validateEmail,
           onSaved: (String val) {
             _email.text = val.trim();
-          }),
-    );
-  }
-
-  Widget _TextFieldsPhone(String _text) {
-    return new Container(
-      child: new TextFormField(
-        //controller: _emailFilter,
-          autofocus: true,
-          style: TextStyle(fontSize: 20.0),
-          decoration: new InputDecoration(
-              contentPadding: EdgeInsets.only(bottom: 5),
-              hintStyle: TextStyle(fontSize: 20.0),
-              hintText: _text),
-          keyboardType: TextInputType.phone,
-//                            maxLength: 10,
-          validator: validateMobile,
-          onSaved: (String val) {
-            _phone.text = val.trim();
           }),
     );
   }

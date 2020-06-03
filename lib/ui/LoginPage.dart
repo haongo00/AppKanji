@@ -3,7 +3,6 @@ import 'package:demoappkanji/helper/generalinfor.dart';
 import 'package:demoappkanji/helper/screenConfig.dart';
 import 'package:demoappkanji/ui/HomePage.dart';
 import 'package:demoappkanji/ui/SignUpPage.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +18,7 @@ class _LoginPage_State extends State<LoginPage> {
   Map _loginmap = new Map();
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
-  TextEditingController _phone_number = TextEditingController();
+  TextEditingController _email = TextEditingController();
   TextEditingController _pass = TextEditingController();
 
   String validatePass(String value) {
@@ -82,7 +81,7 @@ class _LoginPage_State extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
+    return WillPopScope(child: Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       resizeToAvoidBottomPadding: true,
@@ -121,7 +120,7 @@ class _LoginPage_State extends State<LoginPage> {
                           TextFormField(
                               style: TextStyle(fontSize: 20.0),
                               decoration: InputDecoration(
-                                hintText: 'Email/ Số điện thoại',
+                                hintText: 'Tên đăng nhập',
                                 border: OutlineInputBorder(),
                                 contentPadding: EdgeInsets.only(left: 5),
                                 hintStyle: TextStyle(
@@ -135,7 +134,7 @@ class _LoginPage_State extends State<LoginPage> {
 //                            maxLength: 10,
                               validator: validateMobile,
                               onSaved: (String val) {
-                                _phone_number.text = val.trim();
+                                _email.text = val.trim();
                               }),
                           SizedBox(
                             width: double.infinity,
@@ -150,44 +149,24 @@ class _LoginPage_State extends State<LoginPage> {
                       height: 60,
                     ),
                     RaisedButton(
-                      // onPressed: () {
-                      //   if (_controller.text == '0123456789') {
-                      //     Navigator.push(context,
-                      //         MaterialPageRoute(builder: (context) => MyBottomNavigationBarStudent(0, 'name', 'status', 'id', 'subject', 'grade', 'form_teaching', 'lesson_per_week', 'time_per_lesson', 'student_per_class', 'address', 'tuition_fee', 'class_fee', 'about_course')));
-                      //   } else if (_controller.text == '0123456788') {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) =>
-                      //                 ClassDetailRequestDemo()));
-                      //   }
                       onPressed: () async {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                        _sendToServer();
 
-//                        _sendToServer();
-//
-//                        _loginmap["phone_number"] = _phone_number.text;
-//                        _loginmap["password"] = _pass.text;
-//                        var loginSuccess1 = await model.login1(_loginmap);
-////
-//                        if (loginSuccess1) {
-////                          Navigator.push(
-////                            context,
-////                            MaterialPageRoute(
-////                              builder: (context) => ClassDetailRequestDemo()));
-//                          Navigator.push(
-//                              context,
-//                              MaterialPageRoute(
-//                                  builder: (context) => MyBottomNavigationBar()));
-//
-//                        }
-//                        else {
-//                          var _message = await model.Infor;
-//                          showInSnackBar(_message);
-//                        }
+                        _loginmap["accountName"] = _email.text;
+                        _loginmap["pass"] = _pass.text;
+                        var loginSuccess1 = await model.login1(_loginmap);
+
+                        print(loginSuccess1);
+
+                        if (loginSuccess1) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
+                        } else {
+                          String _message = await model.message;
+                          showInSnackBar(_message);
+                        }
                       },
                       color: colorApp,
                       child: Container(
@@ -222,11 +201,10 @@ class _LoginPage_State extends State<LoginPage> {
                       //                 ClassDetailRequestDemo()));
                       //   }
                       onPressed: () async {
-
                         Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUpPage()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUpPage()));
 //                        _sendToServer();
 //
 //                        _loginmap["phone_number"] = _phone_number.text;
@@ -273,7 +251,7 @@ class _LoginPage_State extends State<LoginPage> {
           );
         }),
       ),
-    );
+    ), onWillPop: () async => false);
   }
 
   Widget _buildBox(String _a, bool _b) {

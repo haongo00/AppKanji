@@ -18,7 +18,7 @@ class _LoginPage_State extends State<LoginPage> {
   Map _loginmap = new Map();
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
-  TextEditingController _email = TextEditingController();
+  TextEditingController _name = TextEditingController();
   TextEditingController _pass = TextEditingController();
 
   String validatePass(String value) {
@@ -30,8 +30,8 @@ class _LoginPage_State extends State<LoginPage> {
     return null;
   }
 
-  String validateMobile(String value) {
-    String patttern = r'(^[0-9]*$)';
+  String validateName(String value) {
+    String patttern = r'(^[a-zA-Z ]*$)';
     RegExp regExp = new RegExp(patttern);
     if (value.length == 0) {
       return "Trường này không được để trống";
@@ -130,11 +130,11 @@ class _LoginPage_State extends State<LoginPage> {
                                 ),
                               ),
                               autofocus: false,
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
 //                            maxLength: 10,
-                              validator: validateMobile,
+                              validator: validateName,
                               onSaved: (String val) {
-                                _email.text = val.trim();
+                                _name.text = val.trim();
                               }),
                           SizedBox(
                             width: double.infinity,
@@ -152,7 +152,7 @@ class _LoginPage_State extends State<LoginPage> {
                       onPressed: () async {
 //                        _sendToServer();
 
-                        _loginmap["accountName"] = _email.text;
+                        _loginmap["accountName"] = _name.text;
                         _loginmap["pass"] = _pass.text;
                         var loginSuccess1 = await model.login1(_loginmap);
 

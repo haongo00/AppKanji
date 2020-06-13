@@ -17,13 +17,13 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPage extends State<SignUpPage> {
   Map signupInfor = new Map();
   String _name_hint = 'Họ và Tên *',
-      _email_hint = 'Tên đăng nhập * ',
+      _account_hint = 'Tên đăng nhập * ',
       _password_hint = 'Mật khẩu *',
       _password_confimation_hint = 'Xác nhận mật khẩu *';
 
   GlobalKey<FormState> _key1 = new GlobalKey();
   bool _validate = false;
-  TextEditingController _email = new TextEditingController();
+  TextEditingController _account = new TextEditingController();
   TextEditingController _name = new TextEditingController();
   TextEditingController _password = new TextEditingController();
   TextEditingController _password_confirm = new TextEditingController();
@@ -130,7 +130,7 @@ class _SignUpPage extends State<SignUpPage> {
                   child: Column(
                     children: <Widget>[
                       _TextFieldsName(_name_hint),
-                      _TextFieldsEmail(_email_hint),
+                      _TextFieldsAccount(_account_hint),
                       _TextFieldsPass(_password_hint, _password),
                       _TextFieldsPassConfirmation(_password_confimation_hint, _password_confirm),
                       SizedBox(
@@ -162,7 +162,7 @@ class _SignUpPage extends State<SignUpPage> {
                               onPressed: () async {
                                 _saveToServer();
                                 signupInfor["userName"] = _name.text;
-                                signupInfor["accountName"] = _email.text;
+                                signupInfor["accountName"] = _account.text;
                                 signupInfor["pass"] = _password.text;
 //                                signupInfor["password_confirmation"] =
 //                                    _password_confirm.text;
@@ -233,7 +233,7 @@ class _SignUpPage extends State<SignUpPage> {
     );
   }
 
-  Widget _TextFieldsEmail(String _text) {
+  Widget _TextFieldsAccount(String _text) {
     return new Container(
       child: new TextFormField(
         //controller: _emailFilter,
@@ -246,11 +246,11 @@ class _SignUpPage extends State<SignUpPage> {
             // hintStyle: TextStyle(fontSize: 20.0),
             // hintText: _text
           ),
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: TextInputType.text,
 //                            maxLength: 10,
-          validator: validateEmail,
+          validator: validateName,
           onSaved: (String val) {
-            _email.text = val.trim();
+            _account.text = val.trim();
           }),
     );
   }

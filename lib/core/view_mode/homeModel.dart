@@ -40,10 +40,15 @@ class HomeModel extends ChangeNotifier {
 
 
   Future<List<SearchWord>> search(String _s) async {
+    var data = {
+      "key":_s,
+      "idUser": authenticationService.id.toString()
+    };
+    print(data);
     try {
-      var res = await http.get(APIUrl + '/search?key=${_s}&idUser=${authenticationService.id}',
+      var res = await http.post(APIUrl + '/search',
 
-//          body: json.encode(data),
+          body: json.encode(data),
           headers: {'Content-Type': 'application/json'});
 
       if (res.statusCode == 200) //return res.body;

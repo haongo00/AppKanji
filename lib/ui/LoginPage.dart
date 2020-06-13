@@ -150,7 +150,7 @@ class _LoginPage_State extends State<LoginPage> {
                     ),
                     RaisedButton(
                       onPressed: () async {
-                        _sendToServer();
+//                        _sendToServer();
 
                         _loginmap["accountName"] = _email.text;
                         _loginmap["pass"] = _pass.text;

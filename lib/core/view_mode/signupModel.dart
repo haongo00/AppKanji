@@ -22,14 +22,15 @@ class SignUpModel extends ChangeNotifier{
 
   Future<bool> signup(Map _map) async {
     var data =  _map;
-//    var data = {
+//    var data1 = {
 //      "userName":"hao1",
 //      "accountName": "01234567843",
 //      "pass": "123456789"
 //
 //    };
+    print(data);
+//    print(data1);
 
-    try {
       var res = await http.post(APIUrl + '/signup',
 
           body: json.encode(data),
@@ -54,10 +55,8 @@ class SignUpModel extends ChangeNotifier{
       } else {
         return null;
       }
-    } catch (e) {
-      print('login error ' + e.toString());
-    }
-    notifyListeners();
+
+//    notifyListeners();
   }
 
 }

@@ -2,6 +2,7 @@ import 'package:demoappkanji/core/model/testKanji.dart';
 import 'package:demoappkanji/core/view_mode/testModel.dart';
 import 'package:demoappkanji/helper/generalinfor.dart';
 import 'package:demoappkanji/ui/HomePage.dart';
+import 'package:demoappkanji/ui/LikeWordPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -78,11 +79,11 @@ class _Result_State extends State<Result> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                                builder: (context) => LikeWordPage()));
 
                       },
                       child: Text(
-                        'Trang chủ',
+                        'Bài mới',
                         style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                       shape: RoundedRectangleBorder(
@@ -96,6 +97,15 @@ class _Result_State extends State<Result> {
               ),
             );
           }),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.home, size: 45,),
+              onPressed:(){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage()));
+              },
+          ),
         ), );
   }
 

@@ -35,8 +35,8 @@ class LoginModel extends ChangeNotifier {
 
   Future<bool> login1(Map _map) async {
 //    var data =  _map;
-//    _map["accountName"] = "an";
-//    _map["pass"] = 'cut';
+    _map["accountName"] = "kien.1807";
+    _map["pass"] = '123456';
     var user  = 'accountName=${_map["accountName"]}&pass=${_map["pass"]}';
     print(user );
 

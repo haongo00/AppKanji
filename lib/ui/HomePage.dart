@@ -123,7 +123,7 @@ class _HomePage_State extends State<HomePage> {
                                   size: 45,
                                   color: colorApp,
                                 ),
-                                hintText: '終，chung',
+                                hintText: '忘，Vong',
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(
                                     color: Colors.grey,

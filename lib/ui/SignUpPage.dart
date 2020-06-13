@@ -39,12 +39,12 @@ class _SignUpPage extends State<SignUpPage> {
   }
 
   String validatePass(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Trường này không được để trống";
-    }
-    return null;
+    RegExp regExp = new RegExp(r'(^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$)');
+    return value.length == 0
+        ? "Trường này không được để trống"
+        : !regExp.hasMatch(value)
+        ? "Mật khẩu không đúng định dạng"
+        : (value == _password_confirm.text) ? null : "Mật khẩu không trùng khớp";
   }
 
   String validateName(String value) {
@@ -75,11 +75,8 @@ class _SignUpPage extends State<SignUpPage> {
     RegExp regExp = new RegExp(pattern);
     if (value.length == 0) {
       return "Trường này không được để trống";
-    } else if (!regExp.hasMatch(value)) {
-      return "Email không đúng định dạng";
-    } else {
-      return null;
     }
+      return null;
   }
 
   _saveToServer() {
@@ -135,18 +132,27 @@ class _SignUpPage extends State<SignUpPage> {
                       _TextFieldsName(_name_hint),
                       _TextFieldsEmail(_email_hint),
                       _TextFieldsPass(_password_hint, _password),
-                      _TextFieldsPass(_password_confimation_hint, _password_confirm),
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
+                      _TextFieldsPassConfirmation(_password_confimation_hint, _password_confirm),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Center(
+//                        padding: EdgeInsets.all(0.0),
                         child: Text(
-                          '*Mật khẩu bắt buộc từ 6 -32 ký tự (bao gồm chữ và số)',
+                          '*Tên tài khoản bao gồm số và chữ, "." hoặc "_".',
                           style: TextStyle(
                               fontSize: 14, fontStyle: FontStyle.italic),
                         ),
                       ),
-                      SizedBox(
-                        height: 5,
+                      Center(
+//                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          '*Mật khẩu ít nhất 8 ký tự (bao gồm chữ và số).',
+                          style: TextStyle(
+                              fontSize: 14, fontStyle: FontStyle.italic),
+                        ),
                       ),
+
                       SizedBox(height: 20),
                       Consumer<SignUpModel>(builder: (_, model, __) {
                         return Padding(
@@ -154,12 +160,12 @@ class _SignUpPage extends State<SignUpPage> {
                           child: Center(
                             child: RaisedButton(
                               onPressed: () async {
-//                                _saveToServer();
+                                _saveToServer();
                                 signupInfor["userName"] = _name.text;
                                 signupInfor["accountName"] = _email.text;
                                 signupInfor["pass"] = _password.text;
-                                signupInfor["password_confirmation"] =
-                                    _password_confirm.text;
+//                                signupInfor["password_confirmation"] =
+//                                    _password_confirm.text;
                                 var success = await model.signup(signupInfor);
                                 if (success) {
                                   Navigator.push(
@@ -231,7 +237,7 @@ class _SignUpPage extends State<SignUpPage> {
     return new Container(
       child: new TextFormField(
         //controller: _emailFilter,
-          autofocus: true,
+//          autofocus: true,
           style: TextStyle(fontSize: 20.0),
           decoration: new InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 5),
@@ -254,7 +260,7 @@ class _SignUpPage extends State<SignUpPage> {
       child: new TextFormField(
         //controller: _emailFilter,
 
-          autofocus: true,
+//          autofocus: true,
           obscureText: true,
           style: TextStyle(fontSize: 20.0),
           decoration: new InputDecoration(
@@ -265,7 +271,28 @@ class _SignUpPage extends State<SignUpPage> {
 //                            maxLength: 10,
           validator: validatePass,
           onSaved: (String val) {
-            _pass.text = val.trim();
+            _password.text = val.trim();
+          }),
+    );
+  }
+
+  Widget _TextFieldsPassConfirmation(String _text, TextEditingController _pass) {
+    return new Container(
+      child: new TextFormField(
+        controller: _password_confirm,
+
+//          autofocus: true,
+          obscureText: true,
+          style: TextStyle(fontSize: 20.0),
+          decoration: new InputDecoration(
+              contentPadding: EdgeInsets.only(bottom: 5),
+              hintStyle: TextStyle(fontSize: 20.0),
+              hintText: _text),
+          keyboardType: TextInputType.visiblePassword,
+//                            maxLength: 10,
+          validator: validatePass,
+          onSaved: (String val) {
+            _password_confirm.text = val.trim();
           }),
     );
   }

@@ -19,7 +19,7 @@ public class JDBCConnection {
 	        try {
 	            Class.forName("com.mysql.jdbc.Driver");
 	            this.conn = DriverManager.getConnection(url, "b9caf2de664961", "c1009b25");
-	            //this.conn = DriverManager.getConnection(url, "root", "453123453");
+	           // this.conn = DriverManager.getConnection(url, "root", "453123453");
 
 	        } catch (ClassNotFoundException e) {
 	            // TODO Auto-generated catch block

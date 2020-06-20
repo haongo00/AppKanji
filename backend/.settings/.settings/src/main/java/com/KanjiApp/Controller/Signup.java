@@ -27,7 +27,8 @@ public class Signup extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 		String s = Util.convertoS(req.getReader());
-		resp.setContentType("application/json");
+		//resp.setCharacterEncoding("UTF-8");
+		//resp.setContentType("application/json");
 		Gson gson = new Gson();
 		Users u = gson.fromJson(s, Users.class);
 		System.out.println(u.getUserName());
@@ -40,7 +41,7 @@ public class Signup extends HttpServlet {
 				printWriter.println(gson.toJson(rp));
 			} else {
 				if (!UserService.passIsValid(u.getPass())) {
-					Res rp = new Res(0, "Mật khẩu không hợp lệ");
+					Res rp = new Res(0, "Mật khẩu không hợp lệ ");
 					printWriter.println(gson.toJson(rp));
 				} else {
 					DAO.InserUser(u.getUserName(), u.getAccountName(), u.getPass());

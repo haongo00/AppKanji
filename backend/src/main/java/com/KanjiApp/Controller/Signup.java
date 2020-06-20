@@ -25,9 +25,9 @@ public class Signup extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
 		String s = Util.convertoS(req.getReader());
-		//resp.setCharacterEncoding("UTF-8");
-		//resp.setContentType("application/json");
+		resp.setContentType("application/json");
 		Gson gson = new Gson();
 		Users u = gson.fromJson(s, Users.class);
 		System.out.println(u.getUserName());
@@ -36,22 +36,22 @@ public class Signup extends HttpServlet {
 		PrintWriter printWriter = resp.getWriter();
 		if(UserService.accNameIsValid(u.getAccountName())) {
 			if(UserService.accNameExist(u.getAccountName())) {
-				Res rp = new Res(0, "This account name has already existed ");
+				Res rp = new Res(0, "Tên tài khoản này đã tồn tại");
 				printWriter.println(gson.toJson(rp));
 			} else {
 				if (!UserService.passIsValid(u.getPass())) {
-					Res rp = new Res(0, "Password is invalid ");
+					Res rp = new Res(0, "Mật khẩu không hợp lệ");
 					printWriter.println(gson.toJson(rp));
 				} else {
 					DAO.InserUser(u.getUserName(), u.getAccountName(), u.getPass());
 					DAO.findlogin(u.getAccountName(), u.getPass());
-					Res rp = new Res(DAO.iduser, "Registration successful");
+					Res rp = new Res(DAO.iduser, "Đăng ký thành công");
 					printWriter.println(gson.toJson(rp));
 				}
 			}
 		}
 		else {
-			Res rp = new Res(0, "Account name is invalid ");
+			Res rp = new Res(0, "Tên tài khoản không hợp lệ ");
 			printWriter.println(gson.toJson(rp));
 		}
 		

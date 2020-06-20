@@ -35,9 +35,9 @@ class LoginModel extends ChangeNotifier {
   }
 
   Future<bool> login1(Map _map) async {
-//    var data =  _map;
-    _map["accountName"] = "kien.1807";
-    _map["pass"] = '123456';
+    var data =  _map;
+//    _map["accountName"] = "kien.1807";
+//    _map["pass"] = '123456';
     var user  = 'accountName=${_map["accountName"]}&pass=${_map["pass"]}';
     print(user );
 
@@ -71,5 +71,29 @@ class LoginModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<bool> profile() async {
+
+    var res = await http.get(APIUrl + '/getuserinfo?idUser=${authenticationService.id}',
+
+        headers: {'Content-Type': 'application/json'});
+
+    if (res.statusCode == 200) //return res.body;
+        {
+      Map<String, dynamic> mapResponse = json.decode(res.body);
+
+
+      if(mapResponse["idUser"] != 0){
+        print(mapResponse.toString());
+        authenticationService.setAccountName(mapResponse["userName"]);
+        return true;
+      }
+    } else {
+      return null;
+    }
+
+//    notifyListeners();
+  }
+
 
 }

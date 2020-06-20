@@ -37,6 +37,20 @@ class TestModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  String _message;
+  String get message => _message;
+  void setMessage(String _s) {
+    _message = _s;
+    notifyListeners();
+  }
+
+  bool _nextPage = false;
+  bool get nextPage => _nextPage;
+  void setNextPage(bool _val){
+    _nextPage = _val;
+    notifyListeners();
+  }
+
   Map<int,String> answer = {
     0 : 'a',
     1 : 'b',
@@ -67,7 +81,14 @@ class TestModel extends ChangeNotifier {
       if (res.statusCode == 200) //return res.body;
           {
         Map<String, dynamic> mapResponse = json.decode(res.body);
-//        print(mapResponse.toString());
+        print(mapResponse.toString());
+
+        if(mapResponse['idUser'] == 0) {
+          setNextPage(false);
+          setMessage(mapResponse['response']);
+        } else {
+          setNextPage(true);
+        }
 
         if(mapResponse['data'] != null){
           final test = mapResponse['data'].cast<Map<String, dynamic>>();

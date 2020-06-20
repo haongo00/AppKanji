@@ -1,8 +1,8 @@
-import '../core/view_mode/loginModel.dart';
-import '../helper/generalinfor.dart';
-import '../helper/screenConfig.dart';
-import '../ui/HomePage.dart';
-import '../ui/SignUpPage.dart';
+import 'package:demoappkanji/core/view_mode/loginModel.dart';
+import 'package:demoappkanji/helper/generalinfor.dart';
+import 'package:demoappkanji/helper/screenConfig.dart';
+import 'package:demoappkanji/ui/HomePage.dart';
+import 'package:demoappkanji/ui/SignUpPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class _LoginPage_State extends State<LoginPage> {
   Map _loginmap = new Map();
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
-  TextEditingController _name = TextEditingController();
+  TextEditingController _email = TextEditingController();
   TextEditingController _pass = TextEditingController();
 
   String validatePass(String value) {
@@ -30,8 +30,8 @@ class _LoginPage_State extends State<LoginPage> {
     return null;
   }
 
-  String validateName(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
+  String validateMobile(String value) {
+    String patttern = r'(^[0-9]*$)';
     RegExp regExp = new RegExp(patttern);
     if (value.length == 0) {
       return "Trường này không được để trống";
@@ -130,11 +130,11 @@ class _LoginPage_State extends State<LoginPage> {
                                 ),
                               ),
                               autofocus: false,
-                              keyboardType: TextInputType.text,
+                              keyboardType: TextInputType.phone,
 //                            maxLength: 10,
-                              validator: validateName,
+                              validator: validateMobile,
                               onSaved: (String val) {
-                                _name.text = val.trim();
+                                _email.text = val.trim();
                               }),
                           SizedBox(
                             width: double.infinity,
@@ -150,11 +150,12 @@ class _LoginPage_State extends State<LoginPage> {
                     ),
                     RaisedButton(
                       onPressed: () async {
-//                        _sendToServer();
+                        _sendToServer();
 
-                        _loginmap["accountName"] = _name.text;
+                        _loginmap["accountName"] = _email.text;
                         _loginmap["pass"] = _pass.text;
                         var loginSuccess1 = await model.login1(_loginmap);
+                        model.profile();
 
                         print(loginSuccess1);
 
@@ -189,43 +190,13 @@ class _LoginPage_State extends State<LoginPage> {
                       height: 10,
                     ),
                     RaisedButton(
-                      // onPressed: () {
-                      //   if (_controller.text == '0123456789') {
-                      //     Navigator.push(context,
-                      //         MaterialPageRoute(builder: (context) => MyBottomNavigationBarStudent(0, 'name', 'status', 'id', 'subject', 'grade', 'form_teaching', 'lesson_per_week', 'time_per_lesson', 'student_per_class', 'address', 'tuition_fee', 'class_fee', 'about_course')));
-                      //   } else if (_controller.text == '0123456788') {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) =>
-                      //                 ClassDetailRequestDemo()));
-                      //   }
+
                       onPressed: () async {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SignUpPage()));
-//                        _sendToServer();
-//
-//                        _loginmap["phone_number"] = _phone_number.text;
-//                        _loginmap["password"] = _pass.text;
-//                        var loginSuccess1 = await model.login1(_loginmap);
-////
-//                        if (loginSuccess1) {
-////                          Navigator.push(
-////                            context,
-////                            MaterialPageRoute(
-////                              builder: (context) => ClassDetailRequestDemo()));
-//                          Navigator.push(
-//                              context,
-//                              MaterialPageRoute(
-//                                  builder: (context) => MyBottomNavigationBar()));
-//
-//                        }
-//                        else {
-//                          var _message = await model.Infor;
-//                          showInSnackBar(_message);
-//                        }
+
                       },
                       color: Colors.red[700],
                       child: Container(

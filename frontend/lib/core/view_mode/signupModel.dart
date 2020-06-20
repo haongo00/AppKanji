@@ -32,30 +32,58 @@ class SignUpModel extends ChangeNotifier{
     print(data);
 //    print(data1);
 
-      var res = await http.post(APIUrl + '/signup',
+    var res = await http.post(APIUrl + '/signup',
 
-          body: json.encode(data),
-          headers: {'Content-Type': 'application/json'});
+        body: json.encode(data),
+        headers: {'Content-Type': 'application/json'});
 
-      if (res.statusCode == 200) //return res.body;
-          {
-        Map<String, dynamic> mapResponse = json.decode(res.body);
+    if (res.statusCode == 200) //return res.body;
+        {
+      Map<String, dynamic> mapResponse = json.decode(res.body);
+
+
+      if(mapResponse["idUser"] != 0){
         print(mapResponse.toString());
-
-        if(mapResponse["idUser"] != 0){
-          authenticationService.setId(mapResponse["idUser"]);
-          _message = 'Đăng kí thành công';
-          return true;
-        }
-        else {
-          _message = 'Đăng kí thất bại';
-          return false;
-        }
-
-
-      } else {
-        return null;
+        print('dhjcbjh');
+        authenticationService.setId(mapResponse["idUser"]);
+        print(mapResponse['userName']);
+        authenticationService.setAccountName(mapResponse["userName"]);
+//print(authenticationService.id.toString() + 'dshjsjh');
+        _message = 'Đăng kí thành công';
+        return true;
       }
+      else {
+        _message = mapResponse["response"];
+        return false;
+      }
+
+
+    } else {
+      return null;
+    }
+
+//    notifyListeners();
+  }
+
+  Future<bool> profile() async {
+
+    var res = await http.get(APIUrl + '/getuserinfo?idUser=${authenticationService.id}',
+
+        headers: {'Content-Type': 'application/json'});
+
+    if (res.statusCode == 200) //return res.body;
+        {
+      Map<String, dynamic> mapResponse = json.decode(res.body);
+
+
+      if(mapResponse["idUser"] != 0){
+        print(mapResponse.toString());
+        authenticationService.setAccountName(mapResponse["userName"]);
+        return true;
+      }
+    } else {
+      return null;
+    }
 
 //    notifyListeners();
   }

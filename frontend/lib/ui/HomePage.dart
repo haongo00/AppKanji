@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -132,7 +130,6 @@ class _HomePage_State extends State<HomePage> {
                                     fontSize: 25,
                                     fontStyle: FontStyle.normal),
                                 suffixIcon: IconButton(
-
                                     icon: Icon(
                                       Icons.search,
                                       color: colorApp,
@@ -182,21 +179,29 @@ class _HomePage_State extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  (words[index].kunyomi != null) ? 'kun: ${words[index].kunyomi}' :"kun: ",
+                                  (words[index].kunyomi != null)
+                                      ? 'kun: ${words[index].kunyomi}'
+                                      : "kun: ",
                                   style: TextStyle(color: Colors.purple),
                                 ),
-                                Text((words[index].onyomi != null) ? 'on: ${words[index].onyomi}' :"on: ",
+                                Text(
+                                    (words[index].onyomi != null)
+                                        ? 'on: ${words[index].onyomi}'
+                                        : "on: ",
                                     style: TextStyle(color: Colors.red)),
                               ],
                             ),
                             onTap: () {
-                              Provider.of<WordModel>(context).getDataKunYomi(words[index].idKanji);
-                              Provider.of<WordModel>(context).likeWord(words[index].idKanji);
+                              Provider.of<WordModel>(context)
+                                  .getDataKunYomi(words[index].idKanji);
+                              Provider.of<WordModel>(context)
+                                  .setLikeword(words[index].status);
 
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => WordPage(words[index])));
+                                      builder: (context) =>
+                                          WordPage(words[index])));
                             },
                           ),
                         ),
@@ -212,7 +217,7 @@ class _HomePage_State extends State<HomePage> {
 //          future: model.search(),
 //            builder: null
 //        ),
-        );
+            );
       }),
     );
   }

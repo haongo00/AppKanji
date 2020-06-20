@@ -1,3 +1,5 @@
+import 'package:demoappkanji/core/authenticationservice.dart';
+
 import '../core/model/searchWord.dart';
 import '../core/model/testKanji.dart';
 import '../core/view_mode/likewordModel.dart';
@@ -22,16 +24,38 @@ class LikeWordPage extends StatefulWidget {
 }
 
 class _LikeWordPage extends State<LikeWordPage> {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void showInSnackBar(String value) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: new Text(value, textAlign: TextAlign.start,
+        style: TextStyle(fontSize: 18),),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Consumer<LikeWordModel>(builder: (_ ,model, __){
       return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
 //        leading: buildPreviousButton(),
           backgroundColor: colorApp,
-          title: Text(
-            'Từ vựng yêu thích',
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '${Provider.of<AuthenticationService>(context, listen: false).accountName}',
+              ),
+              Text(
+                'Từ vựng yêu thích',
+              ),
+              SizedBox(height: 10,)
+            ],
           ),
 
           centerTitle: true,
@@ -105,10 +129,15 @@ class _LikeWordPage extends State<LikeWordPage> {
                 color: colorApp,
                 onPressed: () {
                   model.getDataTestPage('meaning');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                      builder: (context) => TestPage()));
+                  if(model.nextPage) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TestPage()));
+                  }
+                  else {
+                    showInSnackBar(model.message);
+                  }
                 },
                 child: Text(
                   'Kiểm tra nghĩa',
@@ -123,10 +152,15 @@ class _LikeWordPage extends State<LikeWordPage> {
                 color: colorApp,
                 onPressed: () {
                   model.getDataTestPage('yomikata');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TestPage()));
+                  if(model.nextPage) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TestPage()));
+                  }
+                  else {
+                    showInSnackBar(model.message);
+                  }
                 },
                 child: Text(
                   'Kiểm tra cách đọc',

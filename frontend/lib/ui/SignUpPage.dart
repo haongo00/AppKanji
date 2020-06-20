@@ -167,6 +167,7 @@ class _SignUpPage extends State<SignUpPage> {
 //                                signupInfor["password_confirmation"] =
 //                                    _password_confirm.text;
                                 var success = await model.signup(signupInfor);
+                                model.profile();
                                 if (success) {
                                   Navigator.push(
                                       context,

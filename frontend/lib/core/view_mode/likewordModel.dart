@@ -14,6 +14,8 @@ class LikeWordModel extends ChangeNotifier {
 
   LikeWordModel({this.authenticationService});
 
+
+
   bool _likeword = true;
   bool get Likeword => _likeword;
   setLikeword(bool _val) {

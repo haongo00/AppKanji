@@ -32,7 +32,8 @@ class _TestPage_State extends State<TestPage> {
 
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
+        body: model.isFetchingDataTestPage ?
+        SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -47,6 +48,9 @@ class _TestPage_State extends State<TestPage> {
               }),
             ],
           ),
+        )
+        : Center(
+          child: CircularProgressIndicator(),
         ),
         bottomNavigationBar: RaisedButton(
             child: Text('Nộp Bài'),
